@@ -706,6 +706,8 @@ class TrackEnvFeet(WalkEnvV0, TrackEnv):
         elif self.model_type == 'jetpack':
             updated_rot = quat2euler(reference[3:7])
             return np.concatenate([reference[:3], updated_rot,  reference[7:]])
+        elif self.model_type == 'full':
+            return np.concatenate([reference[:3], reference[6:]])
         else:
             raise NotImplementedError
 
@@ -716,6 +718,10 @@ class TrackEnvFeet(WalkEnvV0, TrackEnv):
         if self.model_type == 'fixed_pelvis':
             return np.zeros_like(self.sim.data.qvel)
         elif self.model_type == 'jetpack':
+            vel = np.zeros_like(self.sim.data.qvel)
+            vel[:3] = reference[:3]
+            return vel
+        elif self.model_type == 'full':
             vel = np.zeros_like(self.sim.data.qvel)
             vel[:3] = reference[:3]
             return vel
@@ -741,6 +747,8 @@ class TrackEnvFeet(WalkEnvV0, TrackEnv):
         if self.model_type == 'fixed_pelvis':
             return self.sim.data.qpos[:]
         elif self.model_type == 'jetpack':
+            return self.sim.data.qpos[2:]
+        elif self.model_type == 'full':
             return self.sim.data.qpos[2:]
         else:
             raise NotImplementedError
@@ -812,6 +820,9 @@ class TrackEnvFeet(WalkEnvV0, TrackEnv):
             self.keypoint_sites = ['pelvis', 'knee_r', 'ankle_r', 'knee_l',
                                       'ankle_l']
         elif model_type == 'fixed_pelvis':
+            self.keypoint_sites = ['pelvis', 'knee_r', 'ankle_r', 'knee_l',
+                                    'ankle_l']
+        elif model_type == 'full':
             self.keypoint_sites = ['pelvis', 'knee_r', 'ankle_r', 'knee_l',
                                     'ankle_l']
         else:

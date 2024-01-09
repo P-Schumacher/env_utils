@@ -71,6 +71,7 @@ def register_myoleg_trackref_full(task_name, object_name, motion_path=None):
     # Track reference motion
     # print("'"+task_name+"'", end=", ")
     id_name = task_name[-3:]
+    print(f'{task_name[:-3]}_full{id_name}')
     register(
         id=f'{task_name[:-3]}_full{id_name}',
         entry_point='myosuite.envs.myo.myomimic.myomimic_feet:TrackEnvFeet',
@@ -94,6 +95,6 @@ def register_myoleg_trackref_full(task_name, object_name, motion_path=None):
 
 
 for task_name, robot_name, object_name, motion_path in MyoLegs_task_spec:
-    register_myoleg_trackref(task_name, object_name, motion_path)
     register_myoleg_trackref_fixed(task_name, object_name, motion_path)
     register_myoleg_trackref_jetpack(task_name, object_name, motion_path)
+    register_myoleg_trackref_full(task_name, object_name, motion_path)
